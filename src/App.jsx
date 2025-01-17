@@ -80,11 +80,16 @@ function App() {
   };
 
   const productModalRef = useRef(null);
+  const delproductModalRef = useRef(null);
   const [modalMode, setModalMode] = useState('');
   const [tempProduct, setTempProduct] = useState(defaultModalState);
 
   useEffect(() => {
     new Modal(productModalRef.current, {
+      backdrop: false
+    });
+
+    new Modal(delproductModalRef.current, {
       backdrop: false
     });
   }, []);
@@ -109,6 +114,17 @@ function App() {
 
   const closeModal = () => {
     const modalInstance = Modal.getInstance(productModalRef.current);
+    modalInstance.hide();
+  };
+
+  const delopenModal = (product) => {
+    setTempProduct(product)
+    const modalInstance = Modal.getInstance(delproductModalRef.current);
+    modalInstance.show();
+  };
+
+  const delcloseModal = () => {
+    const modalInstance = Modal.getInstance(delproductModalRef.current);
     modalInstance.hide();
   };
 
@@ -179,7 +195,7 @@ function App() {
                 <td>
                   <div className="btn-group">
                     <button onClick={() => openModal('edit', product)}  type="button" className="btn btn-outline-primary btn-sm">編輯</button>
-                    <button type="button" className="btn btn-outline-danger btn-sm">刪除</button>
+                    <button onClick={() => delopenModal(product)} type="button" className="btn btn-outline-danger btn-sm">刪除</button>
                   </div>
                 </td>
               </tr>
@@ -414,7 +430,47 @@ function App() {
   </div>
 
   {/* 刪除 Modal */}
-    
+  <div
+    ref={delproductModalRef}
+    className="modal fade"
+    id="delProductModal"
+    tabIndex="-1"
+    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+  >
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h1 className="modal-title fs-5">刪除產品</h1>
+          <button
+            onClick={delcloseModal}
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="modal-body">
+          你是否要刪除 
+          <span className="text-danger fw-bold">{tempProduct.title}</span>
+        </div>
+        <div className="modal-footer">
+          <button
+            onClick={delcloseModal}
+            type="button"
+            className="btn btn-secondary"
+          >
+            取消
+          </button>
+          <button
+            onClick
+            type="button" className="btn btn-danger">
+            刪除
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </>
   )
 };
