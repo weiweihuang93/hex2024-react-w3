@@ -20,8 +20,8 @@ const defaultModalState = {
 
 function App() {
   const [account, setAccount] = useState({
-    "username": "example@test.com",
-    "password": "example"
+    "username": "",
+    "password": ""
   });
   const [isAuth, setIsAuth] = useState(false);
   const [products, setProducts] = useState([]);
@@ -242,7 +242,13 @@ function App() {
                 <th scope="row">{product.title}</th>
                 <td>{product.origin_price}</td>
                 <td>{product.price}</td>
-                <td>{product.is_enabled}</td>
+                <td
+                  style={{
+                    color: product.is_enabled ? 'green' : 'red',
+                    fontWeight: 'bold',
+                  }}>
+                  {product.is_enabled ? '啟用' : '未啟用'}
+                </td>
                 <td>
                   <div className="btn-group">
                     <button onClick={() => openModal('edit', product)}  type="button" className="btn btn-outline-primary btn-sm">編輯</button>
