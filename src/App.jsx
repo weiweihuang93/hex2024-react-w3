@@ -164,6 +164,57 @@ function App() {
     })
   };
 
+  const createProduct = async () => {
+    try {
+      await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`, {
+        data: {
+          ...tempProduct,
+          origin_price: Number(tempProduct.origin_price),
+          price: Number(tempProduct.price),
+          is_enabled: tempProduct.is_enabled ? 1 : 0
+        }
+      });
+    } catch (error) {
+      alert('新增產品失敗');
+    }
+  };
+
+  const editProduct = async () => {
+    try {
+      await axios.put(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`, {
+        data: {
+          ...tempProduct,
+          origin_price: Number(tempProduct.origin_price),
+          price: Number(tempProduct.price),
+          is_enabled: tempProduct.is_enabled ? 1 : 0
+        }
+      });
+    } catch (error) {
+      alert('修改產品失敗');
+    }
+  };
+
+  const handleUpdateProduct = async () => {
+    const apiCall = modalMode === 'create' ? createProduct : editProduct;
+    try {
+      await apiCall();
+      getProduct();
+      closeModal();
+    } catch (error) {
+      alert('更新產品失敗');
+    }
+  };
+
+  const delProduct = async () => {
+    try {
+      await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`);
+      getProduct();
+      delcloseModal();
+    } catch (error) {
+      alert('刪除產品失敗');
+    }
+  };
+  
   return(
   <>
   {isAuth ? 
@@ -421,7 +472,7 @@ function App() {
           <button onClick={closeModal} type="button" className="btn btn-secondary">
             取消
           </button>
-          <button type="button" className="btn btn-primary">
+          <button onClick={handleUpdateProduct} type="button" className="btn btn-primary">
             確認
           </button>
         </div>
@@ -462,7 +513,7 @@ function App() {
             取消
           </button>
           <button
-            onClick
+            onClick={delProduct}
             type="button" className="btn btn-danger">
             刪除
           </button>
